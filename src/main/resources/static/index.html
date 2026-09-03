@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand-mark">EM</div>
+        <div>
+            <p class="eyebrow">People operations</p>
+            <h1>Employee directory</h1>
+        </div>
+        <span class="connection"><span class="dot"></span> Local workspace</span>
+    </header>
+
+    <main class="container">
+        <section class="intro">
+            <div><p class="eyebrow">Overview</p><h2>Keep your team moving.</h2><p class="muted">Manage employees, departments, and the details that keep your organisation connected.</p></div>
+            <div class="stat"><strong id="employeeCount">0</strong><span>Employees</span></div>
+            <div class="stat"><strong id="departmentCount">0</strong><span>Departments</span></div>
+        </section>
+
+        <div id="notice" class="notice" role="status"></div>
+
+        <section class="workspace">
+            <div class="panel form-panel">
+                <div class="section-heading"><div><p class="eyebrow">Directory record</p><h2 id="employeeFormTitle">Add employee</h2></div><span id="editBadge" class="badge hidden">Editing</span></div>
+                <form id="employeeForm">
+                    <div class="form-grid">
+                        <label>Employee code<input type="text" id="employeeCode" placeholder="EMP-1004" required></label>
+                        <label>Status<select id="status" required><option value="ACTIVE">Active</option><option value="ON_LEAVE">On leave</option><option value="INACTIVE">Inactive</option></select></label>
+                        <label>First name<input type="text" id="firstName" required></label>
+                        <label>Last name<input type="text" id="lastName" required></label>
+                        <label>Email<input type="email" id="email" required></label>
+                        <label>Phone<input type="text" id="phone" pattern="[0-9]{10}" placeholder="10 digit number" required></label>
+                        <label>Designation<input type="text" id="designation" required></label>
+                        <label>Department<select id="departmentId" required><option value="">Select department</option></select></label>
+                        <label>Salary<input type="number" id="salary" min="0.01" step="0.01" required></label>
+                        <label>Joining date<input type="date" id="joiningDate" required></label>
+                    </div>
+                    <p class="subheading">Address <span>Optional</span></p>
+                    <div class="form-grid address-grid">
+                        <label>Street<input type="text" id="street"></label><label>City<input type="text" id="city"></label><label>State<input type="text" id="state"></label><label>Pincode<input type="text" id="pincode"></label><label>Country<input type="text" id="country"></label>
+                    </div>
+                    <div class="form-actions"><button type="submit" id="employeeSubmit">Save employee</button><button type="button" class="secondary" id="resetEmployeeForm">Clear</button></div>
+                </form>
+            </div>
+
+            <aside class="panel department-panel">
+                <div class="section-heading"><div><p class="eyebrow">Structure</p><h2>Departments</h2></div></div>
+                <form id="departmentForm">
+                    <input type="hidden" id="departmentEditId">
+                    <label>Name<input type="text" id="departmentName" required></label>
+                    <label>Location<input type="text" id="departmentLocation" required></label>
+                    <label>Description<textarea id="departmentDescription" rows="3"></textarea></label>
+                    <div class="form-actions"><button type="submit" id="departmentSubmit">Add department</button><button type="button" class="secondary" id="resetDepartmentForm">Clear</button></div>
+                </form>
+                <div id="departmentList" class="department-list"></div>
+            </aside>
+        </section>
+
+        <section class="panel directory-panel">
+            <div class="header-row"><div><p class="eyebrow">All records</p><h2>Employees</h2></div><button class="secondary" id="clearFilters">Clear filters</button></div>
+            <div class="filters"><label>Search name<input type="search" id="searchName" placeholder="Search by name"></label><label>Department<select id="filterDepartment"><option value="">All departments</option></select></label><label>Designation<input type="search" id="filterDesignation" placeholder="e.g. Developer"></label><button id="applyFilters">Filter</button></div>
+            <div id="employeeList" class="table-wrap"></div>
+        </section>
+    </main>
+    <script src="app.js"></script>
+</body>
+</html>
