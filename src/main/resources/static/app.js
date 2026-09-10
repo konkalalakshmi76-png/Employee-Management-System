@@ -1,5 +1,10 @@
-const API_BASE = '/api';
+const API_BASE = `${window.location.protocol}//${window.location.host}/api`;
 const AUTH_HEADERS = { Authorization: 'Basic ' + btoa('admin:admin123') };
+
+if (window.location.username || window.location.password) {
+    const cleanUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}${window.location.search}${window.location.hash}`;
+    window.history.replaceState({}, document.title, cleanUrl);
+}
 
 const employeeForm = document.getElementById('employeeForm');
 const departmentForm = document.getElementById('departmentForm');
@@ -7,6 +12,8 @@ const employeeList = document.getElementById('employeeList');
 const departmentSelect = document.getElementById('departmentId');
 const filterDepartment = document.getElementById('filterDepartment');
 let employees = [];
+
+document.getElementById('todayLabel').textContent = new Intl.DateTimeFormat(undefined, { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date());
 
 async function request(path, options = {}) {
     const response = await fetch(`${API_BASE}${path}`, { ...options, headers: { ...AUTH_HEADERS, ...options.headers } });
@@ -37,7 +44,7 @@ async function loadDepartments() {
         departmentSelect.appendChild(option.cloneNode(true));
         filterDepartment.appendChild(option);
     });
-    document.getElementById('departmentList').innerHTML = departments.map(department => `<div class="department-item"><div><strong>${escapeHtml(department.departmentName)}</strong><span>${escapeHtml(department.location)}</span></div><button class="icon-button" title="Edit department" data-department-edit="${department.id}">Edit</button></div>`).join('');
+    document.getElementById('departmentList').innerHTML = departments.length ? departments.map(department => `<div class="department-item"><div><strong>${escapeHtml(department.departmentName)}</strong><span>${escapeHtml(department.location)}</span></div><button class="icon-button" title="Edit department" data-department-edit="${department.id}">Edit</button></div>`).join('') : '<div class="empty-state"><strong>No departments yet</strong><span>Add one above to get started.</span></div>';
     document.querySelectorAll('[data-department-edit]').forEach(button => button.addEventListener('click', () => editDepartment(departments.find(item => item.id == button.dataset.departmentEdit))));
 }
 
@@ -84,7 +91,7 @@ async function loadEmployees() {
                         <td>${escapeHtml(employee.designation)}</td>
                         <td>${escapeHtml(employee.departmentName || 'N/A')}</td>
                         <td>${Number(employee.salary).toLocaleString(undefined, { style: 'currency', currency: 'INR', maximumFractionDigits: 0 })}</td>
-                        <td><span class="status ${employee.status.toLowerCase()}">${escapeHtml(employee.status.replace('_', ' '))}</span></td>
+                        <td><span class="status ${(employee.status || '').toLowerCase()}">${escapeHtml((employee.status || 'Unknown').replace('_', ' '))}</span></td>
                         <td>
                             <button class="table-action" data-id="${employee.id}" data-action="edit">Edit</button><button class="table-action danger" data-id="${employee.id}" data-action="delete">Delete</button>
                         </td>
@@ -94,7 +101,7 @@ async function loadEmployees() {
         </table>
     `;
 
-    document.querySelectorAll('[data-action="delete"]').forEach(btn => {
+    document.querySelectorAll('[data-action]').forEach(btn => {
         btn.addEventListener('click', async () => {
             const id = btn.dataset.id;
             const employee = employees.find(item => item.id == id);
@@ -174,5 +181,4 @@ function populateEmployeeForm(employee) { Object.entries(employee).forEach(([key
 function editDepartment(department) { document.getElementById('departmentEditId').value = department.id; document.getElementById('departmentName').value = department.departmentName; document.getElementById('departmentLocation').value = department.location; document.getElementById('departmentDescription').value = department.description || ''; document.getElementById('departmentSubmit').textContent = 'Update department'; }
 function escapeHtml(value) { return String(value ?? '').replace(/[&<>'"]/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[character])); }
 
-loadDepartments();
-loadEmployees();
+Promise.all([loadDepartments(), loadEmployees()]).catch(error => showNotice(error.message || 'Unable to load workspace data', true));

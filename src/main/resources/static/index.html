@@ -3,31 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Management System</title>
+    <title>People Desk | Employee Management</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header class="topbar">
-        <div class="brand-mark">EM</div>
-        <div>
-            <p class="eyebrow">People operations</p>
-            <h1>Employee directory</h1>
+        <div class="topbar-inner">
+            <a class="brand" href="/" aria-label="People Desk home">
+                <span class="brand-mark">PD</span>
+                <span><strong>People Desk</strong><small>Employee operations</small></span>
+            </a>
+            <div class="topbar-meta"><span class="live-dot"></span><span>Workspace online</span><span class="date-label" id="todayLabel"></span></div>
         </div>
-        <span class="connection"><span class="dot"></span> Local workspace</span>
     </header>
 
     <main class="container">
-        <section class="intro">
-            <div><p class="eyebrow">Overview</p><h2>Keep your team moving.</h2><p class="muted">Manage employees, departments, and the details that keep your organisation connected.</p></div>
-            <div class="stat"><strong id="employeeCount">0</strong><span>Employees</span></div>
-            <div class="stat"><strong id="departmentCount">0</strong><span>Departments</span></div>
+        <section class="hero">
+            <div><p class="eyebrow">Operations overview</p><h1>Know your people.<br><em>Move with purpose.</em></h1><p class="hero-copy">One calm place to keep employee records accurate, current, and easy to find.</p></div>
+            <div class="hero-stats">
+                <div class="stat"><span class="stat-icon">◉</span><strong id="employeeCount">0</strong><span>Employees</span></div>
+                <div class="stat"><span class="stat-icon">⌘</span><strong id="departmentCount">0</strong><span>Departments</span></div>
+            </div>
         </section>
 
         <div id="notice" class="notice" role="status"></div>
 
         <section class="workspace">
             <div class="panel form-panel">
-                <div class="section-heading"><div><p class="eyebrow">Directory record</p><h2 id="employeeFormTitle">Add employee</h2></div><span id="editBadge" class="badge hidden">Editing</span></div>
+                <div class="section-heading"><div><p class="eyebrow">Directory record</p><h2 id="employeeFormTitle">Add employee</h2><p class="section-note">Create or update a team member's profile.</p></div><span id="editBadge" class="badge hidden">Editing</span></div>
                 <form id="employeeForm">
                     <div class="form-grid">
                         <label>Employee code<input type="text" id="employeeCode" placeholder="EMP-1004" required></label>
@@ -35,22 +38,22 @@
                         <label>First name<input type="text" id="firstName" required></label>
                         <label>Last name<input type="text" id="lastName" required></label>
                         <label>Email<input type="email" id="email" required></label>
-                        <label>Phone<input type="text" id="phone" pattern="[0-9]{10}" placeholder="10 digit number" required></label>
+                        <label>Phone<input type="tel" id="phone" pattern="[0-9]{10}" placeholder="10 digit number" required></label>
                         <label>Designation<input type="text" id="designation" required></label>
                         <label>Department<select id="departmentId" required><option value="">Select department</option></select></label>
                         <label>Salary<input type="number" id="salary" min="0.01" step="0.01" required></label>
                         <label>Joining date<input type="date" id="joiningDate" required></label>
                     </div>
-                    <p class="subheading">Address <span>Optional</span></p>
+                    <p class="subheading">Address <span>Optional details</span></p>
                     <div class="form-grid address-grid">
                         <label>Street<input type="text" id="street"></label><label>City<input type="text" id="city"></label><label>State<input type="text" id="state"></label><label>Pincode<input type="text" id="pincode"></label><label>Country<input type="text" id="country"></label>
                     </div>
-                    <div class="form-actions"><button type="submit" id="employeeSubmit">Save employee</button><button type="button" class="secondary" id="resetEmployeeForm">Clear</button></div>
+                    <div class="form-actions"><button type="submit" id="employeeSubmit">Save employee <span>→</span></button><button type="button" class="secondary" id="resetEmployeeForm">Clear</button></div>
                 </form>
             </div>
 
             <aside class="panel department-panel">
-                <div class="section-heading"><div><p class="eyebrow">Structure</p><h2>Departments</h2></div></div>
+                <div class="section-heading"><div><p class="eyebrow">Team structure</p><h2>Departments</h2><p class="section-note">Organise people by where they do their best work.</p></div></div>
                 <form id="departmentForm">
                     <input type="hidden" id="departmentEditId">
                     <label>Name<input type="text" id="departmentName" required></label>
@@ -63,8 +66,8 @@
         </section>
 
         <section class="panel directory-panel">
-            <div class="header-row"><div><p class="eyebrow">All records</p><h2>Employees</h2></div><button class="secondary" id="clearFilters">Clear filters</button></div>
-            <div class="filters"><label>Search name<input type="search" id="searchName" placeholder="Search by name"></label><label>Department<select id="filterDepartment"><option value="">All departments</option></select></label><label>Designation<input type="search" id="filterDesignation" placeholder="e.g. Developer"></label><button id="applyFilters">Filter</button></div>
+            <div class="header-row"><div><p class="eyebrow">All records</p><h2>Employee directory</h2></div><button class="secondary" id="clearFilters">Reset filters</button></div>
+            <div class="filters"><label>Search name<input type="search" id="searchName" placeholder="Search by name"></label><label>Department<select id="filterDepartment"><option value="">All departments</option></select></label><label>Designation<input type="search" id="filterDesignation" placeholder="e.g. Developer"></label><button id="applyFilters">Apply filters <span>→</span></button></div>
             <div id="employeeList" class="table-wrap"></div>
         </section>
     </main>
