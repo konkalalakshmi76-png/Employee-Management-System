@@ -170,8 +170,17 @@ departmentForm.addEventListener('submit', async (event) => {
     } catch (error) { showNotice(error.message, true); }
 });
 
-document.getElementById('applyFilters').addEventListener('click', loadEmployees);
-document.getElementById('clearFilters').addEventListener('click', () => { document.getElementById('searchName').value = ''; filterDepartment.value = ''; document.getElementById('filterDesignation').value = ''; loadEmployees(); });
+document.getElementById('applyFilters').addEventListener('click', () => loadEmployees());
+
+document.getElementById('clearFilters').addEventListener('click', () => {
+    document.getElementById('searchName').value = '';
+    document.getElementById('filterDesignation').value = '';
+    if (filterDepartment.options.length > 0) {
+        filterDepartment.selectedIndex = 0;
+        filterDepartment.value = '';
+    }
+    loadEmployees();
+});
 document.getElementById('resetEmployeeForm').addEventListener('click', resetEmployeeForm);
 document.getElementById('resetDepartmentForm').addEventListener('click', resetDepartmentForm);
 
